@@ -747,6 +747,9 @@ PaddingSizeProperty:
 TextSizeProperty:
   key='textSize' ':'? value=SizeValue ';'?;
 
+TextColorProperty:
+  key='textColor' ':'? (customColor=[CustomColor:CustomColorId] | colorLiteral=ColorLiteral) ';'?;
+
 type SizeProperty = ShapeSizeProperty | PaddingSizeProperty | TextSizeProperty;
 
 StyleProperty:
@@ -758,7 +761,8 @@ StyleProperty:
   MultipleProperty |
   ShapeSizeProperty |
   PaddingSizeProperty |
-  TextSizeProperty
+  TextSizeProperty |
+  TextColorProperty
 ;
 
 ElementStyleProperty:

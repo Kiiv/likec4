@@ -105,6 +105,18 @@ describe.concurrent('specification', () => {
             size large
           }
         }
+        element elementTextColorCustom {
+          style {
+            textColor textColorValue
+          }
+        }
+        color textColorValue #00000F
+        element elementTextColorLiteral {
+          style {
+            textColor #00000F
+          }
+        }
+
       }
       `
 

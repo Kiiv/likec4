@@ -1,7 +1,7 @@
 import type * as c4 from '@likec4/core'
 import { invariant, nonexhaustive, nonNullable } from '@likec4/core'
 import { isBoolean, isDefined, isNonNullish, isTruthy } from 'remeda'
-import { ast, parseAstOpacityProperty, parseAstSizeValue, parseMarkdownAsString, toColor } from '../../ast'
+import { ast, parseAstOpacityProperty, parseAstSizeValue, parseMarkdownAsString, toColor, toColorLiteral } from '../../ast'
 import { logWarnError } from '../../logger'
 import { projectIdFrom } from '../../utils'
 import { importsRef, instanceRef } from '../../utils/fqnRef'
@@ -154,6 +154,13 @@ export function ExpressionV2Parser<TBase extends Base>(B: TBase) {
           if (ast.isTextSizeProperty(prop)) {
             if (isTruthy(prop.value)) {
               acc.custom[prop.key] = parseAstSizeValue(prop)
+            }
+            return acc
+          }
+          if (ast.isTextColorProperty(prop)) {
+            const value = prop.customColor ? toColorLiteral(prop.customColor) : this.parseColorLiteral(prop.colorLiteral)
+            if (isDefined(value)) {
+              acc.custom[prop.key] = value
             }
             return acc
           }

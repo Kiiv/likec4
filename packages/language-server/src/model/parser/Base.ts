@@ -26,6 +26,7 @@ import {
   parseAstSizeValue,
   parseMarkdownAsString,
   toColor,
+  toColorLiteral,
 } from '../../ast'
 import type { ProjectConfig } from '../../config'
 import type { LikeC4Services } from '../../module'
@@ -244,8 +245,8 @@ export class BaseParser {
     }
   }
 
-  parseColorLiteral(astNode: ast.ColorLiteral): c4.ColorLiteral | undefined {
-    if (!this.isValid(astNode)) {
+  parseColorLiteral(astNode: ast.ColorLiteral | undefined): c4.ColorLiteral | undefined {
+    if (!astNode || !this.isValid(astNode)) {
       return undefined
     }
     if (ast.isHexColor(astNode)) {
@@ -343,6 +344,13 @@ export class BaseParser {
         case ast.isTextSizeProperty(prop): {
           if (isTruthy(prop.value)) {
             result.textSize = parseAstSizeValue(prop)
+          }
+          break
+        }
+        case ast.isTextColorProperty(prop): {
+          const color = prop.customColor ? toColorLiteral(prop.customColor) : this.parseColorLiteral(prop.colorLiteral)
+          if (isTruthy(color)) {
+            result.textColor = color
           }
           break
         }

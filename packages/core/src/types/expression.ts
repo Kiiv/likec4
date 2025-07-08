@@ -7,6 +7,7 @@ import { type Icon } from './scalar'
 import type {
   BorderStyle,
   Color,
+  ColorLiteral,
   ElementShape,
   RelationshipArrowType,
   RelationshipLineType,
@@ -99,6 +100,7 @@ export namespace FqnExpr {
       size?: ShapeSize
       padding?: ShapeSize
       textSize?: ShapeSize
+      textColor?: ColorLiteral
     }
   }
 

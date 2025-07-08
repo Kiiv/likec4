@@ -6,6 +6,7 @@ import type * as scalar from './scalar'
 import type {
   BorderStyle,
   Color,
+  ColorLiteral,
   ElementShape,
   RelationshipArrowType,
   RelationshipLineType,
@@ -45,6 +46,9 @@ export interface ElementStyle {
   readonly padding?: SpacingSize
 
   readonly textSize?: TextSize
+  
+  readonly textColor?: ColorLiteral
+
 }
 
 // dprint-ignore

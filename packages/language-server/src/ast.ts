@@ -1,8 +1,8 @@
 import type * as c4 from '@likec4/core'
 import { DefaultArrowType, DefaultLineStyle, DefaultRelationshipColor, MultiMap, nonexhaustive } from '@likec4/core'
-import type { AstNode, AstNodeDescription, DiagnosticInfo, LangiumDocument } from 'langium'
+import type { AstNode, AstNodeDescription, DiagnosticInfo, LangiumDocument, Reference } from 'langium'
 import { AstUtils, DocumentState } from 'langium'
-import { clamp, isNullish, isTruthy } from 'remeda'
+import { clamp, isNullish, isNumber, isString, isTruthy } from 'remeda'
 import type { ConditionalPick, MergeExclusive, Simplify, ValueOf, Writable } from 'type-fest'
 import type { Diagnostic } from 'vscode-languageserver-types'
 import type { LikeC4Grammar } from './generated/ast'
@@ -54,6 +54,7 @@ export type ParsedElementStyle = {
   size?: c4.ShapeSize
   padding?: c4.SpacingSize
   textSize?: c4.TextSize
+  textColor?: c4.ColorLiteral
 }
 
 export interface ParsedAstSpecification {
@@ -355,6 +356,10 @@ export function toRelationshipStyleExcludeDefaults(
 
 export function toColor(astNode: ast.ColorProperty): c4.Color | undefined {
   return astNode?.themeColor ?? (astNode?.customColor?.$refText as (c4.HexColor | undefined))
+}
+
+export function toColorLiteral(customColor: Reference<ast.CustomColor>): c4.ColorLiteral | undefined {
+  return customColor?.$refText as (c4.HexColor | undefined)
 }
 
 export function toAutoLayout(

@@ -35,6 +35,7 @@ export interface ElementSpecification {
     size?: ShapeSize
     padding?: SpacingSize
     textSize?: TextSize
+    textColor?: ColorLiteral
     multiple?: boolean
   }
 }
