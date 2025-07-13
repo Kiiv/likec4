@@ -289,6 +289,7 @@ export class LikeC4Formatter extends AbstractFormatter {
       || ast.isShapeSizeProperty(node)
       || ast.isPaddingSizeProperty(node)
       || ast.isTextSizeProperty(node)
+      || ast.isTextColorProperty(node)
     ) {
       const formatter = this.getNodeFormatter(node)
       const colon = formatter.keyword(':')
@@ -310,6 +311,7 @@ export class LikeC4Formatter extends AbstractFormatter {
         'size',
         'padding',
         'textSize',
+        'textColor',
       )
 
       if (colon.nodes.length === 0) {

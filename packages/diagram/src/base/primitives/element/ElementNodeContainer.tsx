@@ -113,6 +113,7 @@ export const ElementNodeContainer = forwardRef<HTMLDivElement, ElementNodeContai
       data-likec4-shape-size={size}
       data-likec4-spacing={padding}
       data-likec4-text-size={textSize}
+      data-likec4-text-color={data.style?.textColor}
       {...(isDimmed !== false && {
         'data-likec4-dimmed': isDimmed,
       })}

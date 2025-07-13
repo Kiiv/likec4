@@ -65,14 +65,20 @@ export function ElementTitle({ id, data, iconSize }: ElementTitleProps) {
         <Text
           component="div"
           className={cx(classes.title, 'likec4-element-title')}
-          lineClamp={isSmOrXs ? 2 : 3}>
+          lineClamp={isSmOrXs ? 2 : 3} 
+          // Override color if defined
+          {...(data.style?.textColor ? {c:data.style?.textColor} : {})}
+          >
           {data.title}
         </Text>
 
         {data.technology && (
           <Text
             component="div"
-            className={cx(classes.technology, 'likec4-element-technology')}>
+            className={cx(classes.technology, 'likec4-element-technology')}
+            // Override color if defined
+            {...(data.style?.textColor ? {c:data.style?.textColor} : {})}
+            >
             {data.technology}
           </Text>
         )}
@@ -87,6 +93,8 @@ export function ElementTitle({ id, data, iconSize }: ElementTitleProps) {
             maxHeight={data.description.isMarkdown ? '8rem' : undefined}
             // textScale={0.95}
             lineClamp={isSmOrXs ? 3 : 5}
+            // Override color if defined
+            {...(data.style?.textColor ? {textColor:data.style?.textColor} : {})}
           />
         )}
       </Box>

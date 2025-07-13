@@ -85,6 +85,7 @@ export class MergedSpecification {
       multiple,
       padding,
       textSize,
+      textColor,
     },
     id,
     kind,
@@ -109,6 +110,7 @@ export class MergedSpecification {
       size ??= __kind.style.size
       padding ??= __kind.style.padding
       textSize ??= __kind.style.textSize
+      textColor ??= __kind.style.textColor
       return {
         ...(color && { color }),
         ...(shape && { shape }),
@@ -120,6 +122,7 @@ export class MergedSpecification {
           ...(size && { size }),
           ...(padding && { padding }),
           ...(textSize && { textSize }),
+          ...(textColor && { textColor }),
           ...(isBoolean(multiple) && { multiple }),
           ...(isNumber(opacity) && { opacity }),
         },

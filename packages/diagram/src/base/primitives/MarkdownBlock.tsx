@@ -1,4 +1,4 @@
-import { type RichTextOrEmpty as RichTextType } from '@likec4/core/types'
+import { type ColorLiteral, type RichTextOrEmpty as RichTextType } from '@likec4/core/types'
 import { cx } from '@likec4/styles/css'
 import { type BoxProps, Box } from '@likec4/styles/jsx'
 import { type MarkdownBlockVariant, markdownBlock } from '@likec4/styles/recipes'
@@ -28,6 +28,10 @@ export type MarkdownBlockProps = Omit<BoxProps, 'dangerouslySetInnerHTML' | 'chi
    * @default "no content"
    */
   emptyText?: string
+  /**
+   * Color of the text
+   */
+  textColor?: ColorLiteral
 }
 
 export const MarkdownBlock = forwardRef<HTMLDivElement, MarkdownBlockProps>(({
@@ -37,6 +41,7 @@ export const MarkdownBlock = forwardRef<HTMLDivElement, MarkdownBlockProps>(({
   hideIfEmpty = false,
   emptyText = 'no content',
   className,
+  textColor,
   ...props
 }, ref) => {
   if (value.isEmpty && hideIfEmpty) {
@@ -58,6 +63,7 @@ export const MarkdownBlock = forwardRef<HTMLDivElement, MarkdownBlockProps>(({
       style={{
         // @ts-expect-error
         ['--mantine-scale']: textScale,
+        ['color']: textColor,
       }}
       {...content}
     />

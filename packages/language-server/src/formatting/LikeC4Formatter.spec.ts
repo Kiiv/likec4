@@ -1114,6 +1114,7 @@ model {
         size     xs
         padding     small
         textSize     md
+        textColor     #00000F
       }
     }
     relationship rel1 {
@@ -1183,6 +1184,7 @@ model {
                 size xs
                 padding small
                 textSize md
+                textColor md
               }
             }
             relationship rel1 {
