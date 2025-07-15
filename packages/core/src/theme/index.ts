@@ -1,4 +1,5 @@
 import { generateColors } from '@mantine/colors-generator'
+import { type MantineColorsTuple } from '@mantine/core'
 import type { ColorLiteral, HexColor, LikeC4Theme, ThemeColorValues } from '../types'
 import { ElementColors } from './element'
 import { RelationshipColors } from './relationships'
@@ -53,16 +54,27 @@ export const defaultTheme: LikeC4Theme = {
   },
 }
 
+type ContrastedColors = [
+  ColorLiteral,
+  ColorLiteral
+]
+
 export function computeColorValues(color: ColorLiteral): ThemeColorValues {
   if (color.match(/^#([0-9a-f]{3}){1,2}$/i)) {
     const colors = generateColors(color)
+    
+    const fillColor = colors[6] as HexColor
+    const strokeColor = colors[7] as HexColor
+    
+    // Select contrasted colors from palette for text and picto
+    const constrastedColors = getContrastedColors(fillColor, colors)
 
     return {
       elements: {
-        fill: colors[6] as HexColor,
-        stroke: colors[7] as HexColor,
-        hiContrast: colors[0] as HexColor,
-        loContrast: colors[1] as HexColor,
+        fill: fillColor,
+        stroke: strokeColor,
+        hiContrast: constrastedColors[0],
+        loContrast: constrastedColors[1],
       },
       relationships: {
         lineColor: colors[4] as HexColor,
@@ -76,6 +88,66 @@ export function computeColorValues(color: ColorLiteral): ThemeColorValues {
       relationships: defaultTheme.relationships['primary'],
     }
   }
+}
+
+// Convert hex string to RGB array
+function hexToRgb(hex: string): [number, number, number] {
+  // Remove '#' if present
+  hex = hex.replace(/^#/, '');
+
+  // Expand shorthand form (#abc → #aabbcc)
+  if (hex.length === 3) {
+    hex = hex.split('').map((char) => char + char).join('');
+  }
+
+  if (hex.length !== 6) {
+    throw new Error(`Invalid hex color: "${hex}"`);
+  }
+
+  const num = parseInt(hex, 16);
+  return [
+    (num >> 16) & 255,
+    (num >> 8) & 255,
+    num & 255
+  ];
+}
+
+// Calculate relative luminance of an RGB color
+function getLuminance([r, g, b]: [number, number, number]): number {
+  const toLinear = (value: number): number => {
+    const v = value / 255;
+    return v <= 0.03928
+      ? v / 12.92
+      : Math.pow((v + 0.055) / 1.055, 2.4);
+  };
+
+  const red = toLinear(r);
+  const green = toLinear(g);
+  const blue = toLinear(b);
+
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+}
+
+// Calculate contrast ratio between two luminance values
+function getContrastRatio(lum1: number, lum2: number): number {
+  const [L1, L2] = lum1 >= lum2 ? [lum1, lum2] : [lum2, lum1];
+  return (L1 + 0.05) / (L2 + 0.05);
+}
+
+// Determine the best text color from 'colors' based on 'refColor'
+export function getContrastedColors(refColor: string, colors: MantineColorsTuple): ContrastedColors {
+  const refColorRgb = hexToRgb(refColor);
+  const lightColorRgb = hexToRgb(colors[0]);
+  const darkColorRgb = hexToRgb(colors[9]);
+
+  const refColorLuminance = getLuminance(refColorRgb);
+  const lightColorLuminance = getLuminance(lightColorRgb);
+  const darkColorLuminance = getLuminance(darkColorRgb);
+
+  const contrastWithLight = getContrastRatio(refColorLuminance, lightColorLuminance);
+  const contrastWithDark = getContrastRatio(refColorLuminance, darkColorLuminance);
+
+  return contrastWithLight < contrastWithDark ? [colors[9] as HexColor, colors[8] as HexColor] : [colors[0] as HexColor, colors[1] as HexColor];
 }
 
 export { ElementColors, RelationshipColors }
